@@ -1,0 +1,83 @@
+package com.dbms;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class DB {
+	private String userDB="root";
+	private String passwordDB="";
+	private String url="jdbc:mysql://localhost:3306/project";
+	private String driver="com.mysql.jdbc.Driver";
+	private Connection conn;
+	PreparedStatement psmt;
+	public void dbconnect(){
+		try {
+			Class.forName(driver);
+			//System.out.println("driver loaded");
+		
+		}catch(ClassNotFoundException e) {
+			
+			System.out.println("Driver loading issues.....");
+			e.printStackTrace();
+		}
+		
+		try {	
+		 conn = DriverManager.getConnection(url, userDB, passwordDB);
+			//System.out.println("conn made " + conn);
+			
+		}catch(SQLException e){
+			
+			System.out.println("DB connection  issue");
+			e.printStackTrace();
+		}
+		
+	}
+public void dbClose() {
+		
+		try {
+			
+			conn.close();
+			//System.out.println("conn cloased");
+		}catch(SQLException e){
+			System.out.println("DB close issue");
+			e.printStackTrace();
+		}
+		
+		}
+public List<Project> fectchAllStudent() {
+	dbconnect();
+	String sql="select * from user";
+	List<Project> list=new ArrayList<>();
+	try {
+		PreparedStatement psmt = conn.prepareStatement(sql);
+		ResultSet rst= psmt.executeQuery();
+		while(rst.next()) {
+			int id=rst.getInt("id");
+			String name=rst.getString("name");
+			int age=rst.getInt("age");
+			int amount=rst.getInt("amount");
+			String policy =rst.getString("policy");
+			
+			Project s= new Project(id, name, age, amount, policy);
+			s.setId(id);
+			s.setName(name);
+			s.setAge(age);
+			s.setAmount(amount);
+			s.setPolicy(policy);
+			
+			list.add(s);
+		}
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	dbClose();
+	return list;
+}
+	
+}

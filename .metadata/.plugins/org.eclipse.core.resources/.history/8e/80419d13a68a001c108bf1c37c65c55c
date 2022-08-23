@@ -1,0 +1,21 @@
+package com.dbms;
+import java.util.List;
+import java.util.Scanner;
+public class App {
+	private static Scanner sc;
+	public static void main(String[] args) {
+	    DB db = new DB();
+	   sc = new Scanner(System.in);
+	   Project s =new Project();
+	   System.out.println("welcome to the project!!!!!!!!!!!!");
+	   System.out.println("ALL STUDENT RECORDS");
+       System.out.println("*************************************************");
+       List<Project> list=db.fectchAllStudent();
+       for(Project stud:list) {
+       	
+       	System.out.println(stud.getId()+ "\t" +stud.getName()+"\t"+stud.getAge()+"   "+stud.getAmount()+"\t\t"+stud.getPolicy());
+       	
+       }
+       System.out.println("**************************************"); 
+}
+}
